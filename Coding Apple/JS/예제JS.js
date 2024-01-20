@@ -6,7 +6,7 @@ $.get("/코딩애플/JS/document/store.json").done((data) => {
           data.products[i].photo
         }" class="card-img-top" />
         <div class="card-body">
-          <h4 class="card-title">${data.products[i].title}</h4>
+          <h4 class="card-title product-name">${data.products[i].title}</h4>
           <p class="card-text">
             <small class="text-body-secondary">${data.products[i].brand}</small>
           </p>
@@ -22,10 +22,17 @@ $.get("/코딩애플/JS/document/store.json").done((data) => {
 });
 
 //   검색기능
-$(".form-control").keydown(function () {
-  var 검색 = $("input").val();
+$(".form-control").keyup(function () {
   // 입력하면 싹다 지우고
-  // 맞는것만 표시하는거롤
+  $(".card.p-2").css("display", "none");
+
+  // 맞는것만 표시
+  var 검색 = $("input").val();
+  for (let k = 0; k < $(".product-name").length; k++) {
+    if ($(".product-name").eq(k).text().replace(/\s+/g, "").match(검색)) {
+      $(".card.p-2").eq(k).css("display", "block");
+    }
+  }
 });
 
 // 장바구니 담기
@@ -89,7 +96,10 @@ $(document).on("input", ".count", function () {
   });
 });
 // 구매하기 하면 성함, 연락처 입력하는 모달창
-
+document.querySelector('.send').addEventListener('click', function(e){
+  // 왜 안먹힐까
+  e.preventDefault();
+});
 // 모달창에서 구매완료 누르면 영수증을 이미지화
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -105,3 +115,6 @@ $(".send").on("click", () => {
   }
   c.fillText(`총합계: ${total_price}`, 30, 300);
 });
+
+// 검색창에서 검색한 물품의 이름 표시 하는 것 / 드래그앤드롭 이벤트에서 상품이 복사가 되서 움직이기 / 구매 모달창 성함, 연락처 입력 안됐을때 이벤트 설정
+// 뭔가 아쉽다.... 
